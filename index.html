@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="scss/main.css">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <title>ToDo</title>
+</head>
+
+<body>
+    <div class="background-noise"></div>
+    <h1>ToDo</h1>
+    <div class="todo-container">
+        <div class="input-container">
+            <input type="text" placeholder="Enter a task">
+            <iconify-icon id="add-task" icon="material-symbols:add" onclick="submitTask()"
+                style="color: white"></iconify-icon>
+        </div>
+        <ul class="list">
+
+    </div>
+    <button onclick="removeTasks()">Remove all tasks</button>
+</body>
+<script type="text/javascript">
+    var key = localStorage.length
+
+
+    window.onload = function getTasks() {
+        for (let i = 0; i < localStorage.length; i++) {
+            let task = localStorage.getItem(localStorage.key(i));
+            document.querySelector('.list').insertAdjacentHTML('beforeend', task);
+        }
+    }
+
+    function submitTask() {
+        var text = document.querySelector('input').value;
+
+        if (text.trim() === "") {
+            return;
+        }
+
+        var task = `
+        <li class="task-item">
+            <span class="task-text">${text}</span>
+            <div class="task-controls">
+                <div class="checkbox-container">
+                <input type="checkbox">
+                <iconify-icon icon="material-symbols:done" class="checkmark"  style="color: white"></iconify-icon>
+                </div>
+                <iconify-icon icon="material-symbols:delete" class="delete-icon" onclick="removeTask(this)"></iconify-icon>
+            </div>
+        </li>
+    `;
+
+        document.querySelector('.list').insertAdjacentHTML('beforeend', task);
+        document.querySelector('input').value = "";
+
+        localStorage.setItem(key, task);
+        key++;
+    }
+
+    function removeTasks() {
+        document.querySelector('.list').innerHTML = "";
+        key = 0;
+        localStorage.clear();
+    }
+
+    function removeTask(element) {
+        // Find the parent <li> element of the clicked delete icon
+        const taskItem = element.closest('li');
+
+        // Get the unique key for the task from the data-key attribute
+        const taskKey = taskItem.getAttribute('data-key');
+
+        // Remove the task from the DOM
+        taskItem.remove();
+
+        // Remove the task from localStorage using the unique key
+        localStorage.removeItem(taskKey);
+    }
+
+</script>
+
+</html>
