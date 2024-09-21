@@ -10,7 +10,7 @@ body {
   background-color: #000000;
   color: #333;
   line-height: 1.6;
-  font-size: 16px;
+  font-size: 14px;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -121,13 +121,11 @@ button#add-task {
 }
 
 li {
-  border: 1.5px solid #474747;
-  background: #151515;
+  background-color: rgba(217, 217, 217, 0.05);
   border-radius: 7px;
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  margin: 10px 0;
   width: 100%;
   color: #fff;
   position: relative;
@@ -136,37 +134,27 @@ li .task-controls {
   position: absolute;
   display: flex;
   right: 15px;
-}
-li .task-controls .checkbox-container {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  margin-right: 10px;
 }
-li .task-controls .checkbox-container input[type=checkbox] {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  width: 24px;
-  height: 24px;
-  background: rgba(217, 217, 217, 0.1);
-  border-radius: 50%;
-  position: relative;
+li .checkmark {
   display: flex;
-  align-items: center;
   justify-content: center;
-  transition: all 0.1s ease-in-out;
-}
-li .task-controls .checkbox-container input[type=checkbox]:checked + .checkmark {
-  opacity: 1;
-}
-li .task-controls .checkbox-container .checkmark {
-  position: absolute;
-  pointer-events: none;
-  font-size: 24px;
-}
-li .task-controls .checkbox-container .checkmark:hover {
+  align-items: center;
   background: rgba(217, 217, 217, 0.05);
+  margin: 0 10px 0 0;
+  font-size: 24px;
+  color: transparent;
+  border-radius: 50%;
+  padding: 5px;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  position: relative;
+}
+li .checkmark:hover {
+  background: rgba(217, 217, 217, 0.1);
+}
+li .checkmark:active {
+  background: rgba(217, 217, 217, 0.2);
 }
 li .delete-icon {
   font-size: 24px;
@@ -184,11 +172,11 @@ li .delete-icon:active {
 li:first-child {
   margin-top: 20px;
 }
-
-.separator {
-  height: 1px;
-  background: #474747;
-  margin: 20px 0;
+li:last-child {
+  margin-bottom: 20px;
+}
+li:nth-child(n+2) {
+  margin-top: 10px;
 }
 
 h1 {

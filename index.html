@@ -26,39 +26,9 @@
     <script type="text/javascript">
         var key = localStorage.length;
 
-        window.onload = function getTasks() {
-            const taskList = document.querySelector('.taskList');
-            // for (let i = 0; i < localStorage.length; i++) {
-            //     const taskKey = localStorage.key(i);
-            //     const taskValue = localStorage.getItem(taskKey);
-            //     const taskItem = createTaskItem(taskValue, taskKey);
-            //     taskList.appendChild(taskItem);
-            // }
-        }
-
-        // function loadTasks() {
-        //     const taskList = document.querySelector('.taskList');
-        //     for (let i = 0; i < localStorage.length; i++) {
-        //         const taskKey = localStorage.key(i);
-        //         const taskValue = localStorage.getItem(taskKey);
-        //         const taskItem = createTaskItem(taskValue, taskKey);
-        //         taskList.appendChild(taskItem);
-        //     }
-        // }
-
-        // // function loadTasks() {
-        // //     const taskList = document.querySelector('.taskList');
-        // //     for (let i = 0; i < localStorage.length; i++) {
-        // //         const taskKey = localStorage.key(i);
-        // //         const taskValue = localStorage.getItem(taskKey);
-        // //         const taskItem = createTaskItem(taskValue, taskKey);
-        // //         taskList.appendChild(taskItem);
-        // //     }
-        // // }
-
         function addTask() {
             const taskList = document.querySelector('.taskList');
-            const newTask = createTaskItem(); 
+            const newTask = createTaskItem();
             taskList.appendChild(newTask);
         }
 
@@ -68,6 +38,8 @@
 
             taskItem.className = 'task-item';
 
+            taskItem.appendChild(createCheckbox(taskItem));
+
             const taskText = document.createElement('span');
             taskText.className = 'task-text';
             taskText.textContent = inputValue;
@@ -76,7 +48,6 @@
             const taskControls = document.createElement('div');
             taskControls.className = 'task-controls';
 
-            taskControls.appendChild(createCheckbox());
             taskControls.appendChild(createDeleteIcon(taskItem));
 
             taskItem.appendChild(taskControls);
@@ -99,30 +70,29 @@
             return deleteIcon;
         }
 
-        function createCheckbox() {
-            const checkboxContainer = document.createElement('div');
-            checkboxContainer.className = 'checkbox-container';
-
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkboxContainer.appendChild(checkbox);
-
+        function createCheckbox(taskItem) {
             const checkmarkIcon = document.createElement('iconify-icon');
             checkmarkIcon.setAttribute('icon', 'material-symbols:done');
             checkmarkIcon.className = 'checkmark';
-            checkmarkIcon.style.color = 'white';
-            checkboxContainer.appendChild(checkmarkIcon);
+            checkmarkIcon.style.color = 'transparent';
 
-            return checkboxContainer;
+            checkmarkIcon.onclick = function () {
+                markCompleted(taskItem, checkmarkIcon);
+            };
+
+            return checkmarkIcon;
         }
 
-        function createSeparator() {
-
+        function markCompleted(taskItem, checkmarkIcon) {
+            if (checkmarkIcon.style.color === 'white') {
+                checkmarkIcon.style.color = 'transparent'; 
+            } else {
+                checkmarkIcon.style.color = 'white'; 
+            }
         }
 
-        function removeTask(taskItem) {
-            const taskKey = taskItem.getAttribute('data-key');
-            localStorage.removeItem(taskKey);
+        function removeTask(task) {
+            localStorage.removeItem();
             taskItem.remove();
         }
 
