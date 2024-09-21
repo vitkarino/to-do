@@ -11,50 +11,74 @@
 
 <body>
     <div class="background-noise"></div>
-    <h1>ToDo</h1>
-    <div class="todo-container">
-        <div class="input-container">
-            <input type="text" placeholder="Enter a task">
-            <iconify-icon id="add-task" icon="material-symbols:add" onclick="addTask()"
-                style="color: white"></iconify-icon>
-        </div>
-        <ul class="taskList"></ul>
-        <div class="separator"></div>
+    <h1>ToDo <a href="https://github.com/vitkarino/to-do" target="_blank" class="credits">GitHub</a></h1>
+    <div class="input-container">
+        <input type="text" placeholder="Enter a task">
+        <iconify-icon id="add-task" icon="material-symbols:add" onclick="addTask()" style="color: white"></iconify-icon>
     </div>
-    <button onclick="removeTasks()">Remove all tasks</button>
+    <ul class="task-list"></ul>
+    <button class="removeAllButton" onclick="removeTasks()">Remove all tasks</button>
 
     <script type="text/javascript">
-        var key = localStorage.length;
+        let key = localStorage.length;
 
-        function addTask() {
-            const taskList = document.querySelector('.taskList');
-            const newTask = createTaskItem();
-            taskList.appendChild(newTask);
+        window.onload = function () {
+            createOrLoadTasks(true);
+            toggleRemoveAllButton();
+        };
+
+        function createOrLoadTasks(load) {
+            if (load) {
+                const items = { ...localStorage };
+                for (const key in items) {
+                    if (isNaN(key[0])) return;
+                    const { task, completed } = JSON.parse(items[key]);
+                    appendTaskToList(key, task, completed);
+                }
+            } else {
+                const inputValue = document.querySelector('input').value;
+                if (inputValue) {
+                    const taskData = { task: inputValue, completed: false };
+                    localStorage.setItem(key, JSON.stringify(taskData));
+                    appendTaskToList(key, inputValue, false);
+                    key++;
+                }
+                toggleRemoveAllButton();
+            }
         }
 
-        function createTaskItem() {
+        function appendTaskToList(taskKey, taskValue, completed) {
+            const taskList = document.querySelector('.task-list');
             const taskItem = document.createElement('li');
-            var inputValue = document.querySelector('input').value;
-
             taskItem.className = 'task-item';
+            taskItem.setAttribute('data-key', taskKey);
 
             const taskText = document.createElement('span');
             taskText.className = 'task-text';
-            taskText.textContent = inputValue;
-            taskItem.appendChild(createCheckbox(taskItem, taskText));
+            taskText.textContent = taskValue;
+            taskItem.appendChild(createCheckbox(taskItem, taskText, completed));
             taskItem.appendChild(taskText);
 
             const taskControls = document.createElement('div');
             taskControls.className = 'task-controls';
-
             taskControls.appendChild(createDeleteIcon(taskItem));
-
             taskItem.appendChild(taskControls);
 
-            localStorage.setItem(key, inputValue);
-            key++;
+            taskList.appendChild(taskItem);
 
-            return taskItem;
+            setTimeout(() => {
+                taskItem.classList.add('visible');
+            }, 1);
+        }
+
+        document.querySelector('input').addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                addTask();
+            }
+        });
+
+        function addTask() {
+            createOrLoadTasks(false);
         }
 
         function createDeleteIcon(taskItem) {
@@ -69,11 +93,12 @@
             return deleteIcon;
         }
 
-        function createCheckbox(taskItem, taskText) {
+        function createCheckbox(taskItem, taskText, completed) {
             const checkmarkIcon = document.createElement('iconify-icon');
             checkmarkIcon.setAttribute('icon', 'material-symbols:done');
             checkmarkIcon.className = 'checkmark';
-            checkmarkIcon.style.color = 'transparent';
+            checkmarkIcon.style.color = completed ? 'white' : 'transparent';
+            taskText.style.textDecoration = completed ? 'line-through' : 'none';
 
             checkmarkIcon.onclick = function () {
                 markCompleted(taskItem, taskText, checkmarkIcon);
@@ -83,25 +108,47 @@
         }
 
         function markCompleted(taskItem, taskText, checkmarkIcon) {
+            const taskKey = taskItem.getAttribute('data-key');
+            const taskData = JSON.parse(localStorage.getItem(taskKey));
+
             if (checkmarkIcon.style.color === 'white') {
-                checkmarkIcon.style.color = 'transparent'; 
-                taskText.style.textDecoration = 'none'
+                checkmarkIcon.style.color = 'transparent';
+                taskText.style.textDecoration = 'none';
+                taskData.completed = false;
             } else {
-                checkmarkIcon.style.color = 'white'; 
-                taskText.style.textDecoration = 'line-through'
+                checkmarkIcon.style.color = 'white';
+                taskText.style.textDecoration = 'line-through';
+                taskData.completed = true;
+            }
+            localStorage.setItem(taskKey, JSON.stringify(taskData));
+        }
+
+        function toggleRemoveAllButton() {
+            const removeAllButton = document.querySelector('.removeAllButton');
+            const taskCount = document.querySelectorAll('.task-item').length;
+
+            if (taskCount >= 4) {
+                removeAllButton.classList.add('visible');
+            } else {
+                removeAllButton.classList.remove('visible');
             }
         }
 
-        function removeTask(task) {
-            localStorage.removeItem();
+        function removeTask(taskItem) {
+            taskItem.classList.add('fade-out'); // Add the fade-out class
+            const taskKey = taskItem.getAttribute('data-key');
+            localStorage.removeItem(taskKey);
             taskItem.remove();
+            toggleRemoveAllButton();
         }
 
         function removeTasks() {
-            document.querySelector('.taskList').innerHTML = "";
+            document.querySelector('.task-list').innerHTML = "";
             localStorage.clear();
             key = 0;
+            toggleRemoveAllButton();
         }
+        
     </script>
 </body>
 

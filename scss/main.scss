@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+ @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 * {
     box-sizing: border-box;
@@ -9,7 +9,7 @@
 
 body {
     background-color: #000000;
-    color: #333;
+    color: white;
     line-height: 1.6;
     font-size: 14px;
     position: absolute;
@@ -21,6 +21,17 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.credits {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.3);
+    transition: all 0.1s ease-in-out;
+    font-weight: 300;
+
+    &:hover {
+        color: rgba(255, 255, 255, 0.5);
+    }
 }
 
 h1 {
@@ -43,7 +54,7 @@ h1 {
     align-items: center;
     justify-content: center;
     margin: 10px 0;
-    border: 1.5px solid #474747;
+    border: 1px solid #474747;
     background: none;
     border-radius: 30px;
     transition: all 0.1s ease-in-out;
@@ -52,11 +63,6 @@ h1 {
     &:hover {
         background: rgba(217, 217, 217, 0.05);
     }
-}
-
-.todo-container {
-    width: 80%;
-    max-width: 400px;
 }
 
 input {
@@ -87,16 +93,27 @@ input {
     }
 }
 
-button {
+.removeAllButton {
+    margin: 10px 0;
     padding: 7px 20px;
-    border: 1.5px solid #474747;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    border: 1px solid #474747;
     background: none;
     color: #fff;
     cursor: pointer;
     border-radius: 30px;
     outline: none;
-    transition: all 0.1s ease-in-out;
+    transition: all 0.2s ease-in-out;
     position: relative;
+    transform: scale(0.95);
+
+    &.visible {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+    }
 
     &:hover {
         background: rgba(217, 217, 217, 0.05);
@@ -129,75 +146,79 @@ button {
     }
 }
 
-li {
-    background-color: rgba(217, 217, 217, 0.05);
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    width: 100%;
-    color: #fff;
-    position: relative;
+.task-list {
+    overflow-y: auto;
+    width: 80%;
+    max-width: 400px;
+    max-height: 500px;
 
-    .task-controls {
-        position: absolute;
+    li {
+        background-color: rgba(217, 217, 217, 0.05);
+        border-radius: 7px;
         display: flex;
-        right: 15px;
         align-items: center;
-    }
-
-    .checkmark {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(217, 217, 217, 0.05);
-        margin: 0 10px 0 0;
-        font-size: 24px;
-        color: transparent;
-        border-radius: 50%;
-        padding: 5px;
-        transition: all 0.1s ease-in-out;
-        cursor: pointer;
+        padding: 10px 20px;
+        width: 100%;
+        color: #fff;
         position: relative;
-
-        &:hover {
-            background: rgba(217, 217, 217, 0.1);
+        transition: all 0.3s ease-in-out;
+        opacity: 0;
+        transform: translateY(-10px);
+    
+        &.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-
-        &:active {
-            background: rgba(217, 217, 217, 0.2);
+    
+        .task-controls {
+            position: absolute;
+            display: flex;
+            right: 15px;
+            align-items: center;
         }
-    }
-
-    .delete-icon {
-        font-size: 24px;
-        padding: 5px;
-        transition: all 0.1s ease-in-out;
-        border-radius: 50%;
-
-        &:hover {
+    
+        .checkmark {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(217, 217, 217, 0.05);
+            margin: 0 10px 0 0;
+            font-size: 24px;
+            color: transparent;
+            border-radius: 50%;
+            padding: 5px;
+            transition: all 0.1s ease-in-out;
             cursor: pointer;
-            background: rgba(217, 217, 217, 0.1);
+            position: relative;
+    
+            &:hover {
+                background: rgba(217, 217, 217, 0.1);
+            }
+    
+            &:active {
+                background: rgba(217, 217, 217, 0.2);
+            }
         }
-
-        &:active {
-            background: rgba(217, 217, 217, 0.2);
+    
+        .delete-icon {
+            font-size: 24px;
+            padding: 5px;
+            transition: all 0.1s ease-in-out;
+            border-radius: 50%;
+    
+            &:hover {
+                cursor: pointer;
+                background: rgba(217, 217, 217, 0.1);
+            }
+    
+            &:active {
+                background: rgba(217, 217, 217, 0.2);
+            }
+        }
+    
+        &:nth-child(n+2) {
+            margin-top: 10px;
         }
     }
 
-    &:first-child {
-        margin-top: 20px;
-    }
-
-    &:last-child {
-        margin-bottom: 20px;
-    }
-
-    &:nth-child(n+2) {
-        margin-top: 10px;
-    }
-}
-
-h1 {
-    color: white;
 }

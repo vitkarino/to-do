@@ -8,7 +8,7 @@
 
 body {
   background-color: #000000;
-  color: #333;
+  color: white;
   line-height: 1.6;
   font-size: 14px;
   position: absolute;
@@ -20,6 +20,16 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.credits {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.1s ease-in-out;
+  font-weight: 300;
+}
+.credits:hover {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 h1 {
@@ -42,7 +52,7 @@ h1 {
   align-items: center;
   justify-content: center;
   margin: 10px 0;
-  border: 1.5px solid #474747;
+  border: 1px solid #474747;
   background: none;
   border-radius: 30px;
   transition: all 0.1s ease-in-out;
@@ -50,11 +60,6 @@ h1 {
 }
 .input-container:hover {
   background: rgba(217, 217, 217, 0.05);
-}
-
-.todo-container {
-  width: 80%;
-  max-width: 400px;
 }
 
 input {
@@ -83,27 +88,37 @@ input {
   background: rgba(217, 217, 217, 0.2);
 }
 
-button {
+.removeAllButton {
+  margin: 10px 0;
   padding: 7px 20px;
-  border: 1.5px solid #474747;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  border: 1px solid #474747;
   background: none;
   color: #fff;
   cursor: pointer;
   border-radius: 30px;
   outline: none;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.2s ease-in-out;
   position: relative;
+  transform: scale(0.95);
 }
-button:hover {
+.removeAllButton.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+.removeAllButton:hover {
   background: rgba(217, 217, 217, 0.05);
 }
-button:hover::after {
+.removeAllButton:hover::after {
   opacity: 0.1;
 }
-button:active {
+.removeAllButton:active {
   transform: scale(0.96);
 }
-button::after {
+.removeAllButton::after {
   content: "";
   position: absolute;
   top: 0;
@@ -116,11 +131,17 @@ button::after {
   z-index: -1;
   transition: all 0.5s ease-in-out;
 }
-button#add-task {
+.removeAllButton#add-task {
   background-color: rgba(0, 136, 255, 0.09);
 }
 
-li {
+.task-list {
+  overflow-y: auto;
+  width: 80%;
+  max-width: 400px;
+  max-height: 500px;
+}
+.task-list li {
   background-color: rgba(217, 217, 217, 0.05);
   border-radius: 7px;
   display: flex;
@@ -129,14 +150,21 @@ li {
   width: 100%;
   color: #fff;
   position: relative;
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(-10px);
 }
-li .task-controls {
+.task-list li.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.task-list li .task-controls {
   position: absolute;
   display: flex;
   right: 15px;
   align-items: center;
 }
-li .checkmark {
+.task-list li .checkmark {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -150,35 +178,25 @@ li .checkmark {
   cursor: pointer;
   position: relative;
 }
-li .checkmark:hover {
+.task-list li .checkmark:hover {
   background: rgba(217, 217, 217, 0.1);
 }
-li .checkmark:active {
+.task-list li .checkmark:active {
   background: rgba(217, 217, 217, 0.2);
 }
-li .delete-icon {
+.task-list li .delete-icon {
   font-size: 24px;
   padding: 5px;
   transition: all 0.1s ease-in-out;
   border-radius: 50%;
 }
-li .delete-icon:hover {
+.task-list li .delete-icon:hover {
   cursor: pointer;
   background: rgba(217, 217, 217, 0.1);
 }
-li .delete-icon:active {
+.task-list li .delete-icon:active {
   background: rgba(217, 217, 217, 0.2);
 }
-li:first-child {
-  margin-top: 20px;
-}
-li:last-child {
-  margin-bottom: 20px;
-}
-li:nth-child(n+2) {
+.task-list li:nth-child(n+2) {
   margin-top: 10px;
-}
-
-h1 {
-  color: white;
 }/*# sourceMappingURL=main.css.map */
