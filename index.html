@@ -38,11 +38,10 @@
 
             taskItem.className = 'task-item';
 
-            taskItem.appendChild(createCheckbox(taskItem));
-
             const taskText = document.createElement('span');
             taskText.className = 'task-text';
             taskText.textContent = inputValue;
+            taskItem.appendChild(createCheckbox(taskItem, taskText));
             taskItem.appendChild(taskText);
 
             const taskControls = document.createElement('div');
@@ -70,24 +69,26 @@
             return deleteIcon;
         }
 
-        function createCheckbox(taskItem) {
+        function createCheckbox(taskItem, taskText) {
             const checkmarkIcon = document.createElement('iconify-icon');
             checkmarkIcon.setAttribute('icon', 'material-symbols:done');
             checkmarkIcon.className = 'checkmark';
             checkmarkIcon.style.color = 'transparent';
 
             checkmarkIcon.onclick = function () {
-                markCompleted(taskItem, checkmarkIcon);
+                markCompleted(taskItem, taskText, checkmarkIcon);
             };
 
             return checkmarkIcon;
         }
 
-        function markCompleted(taskItem, checkmarkIcon) {
+        function markCompleted(taskItem, taskText, checkmarkIcon) {
             if (checkmarkIcon.style.color === 'white') {
                 checkmarkIcon.style.color = 'transparent'; 
+                taskText.style.textDecoration = 'none'
             } else {
                 checkmarkIcon.style.color = 'white'; 
+                taskText.style.textDecoration = 'line-through'
             }
         }
 
